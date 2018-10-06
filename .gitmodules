@@ -1,0 +1,6 @@
+[submodule "torch7"]
+	path = torch7
+	url = https://github.com/tuotuoxp/torch7.git
+[submodule "nn"]
+	path = nn
+	url = https://github.com/tuotuoxp/nn.git
