@@ -11,8 +11,8 @@ if(UNIX)
 endif()
 
 
-if(NOT Torch_FOUND)
-  find_package(Torch REQUIRED)
+if(NOT TH_FOUND)
+  find_package(TH REQUIRED)
 endif()
 
 
@@ -25,11 +25,12 @@ macro(generate_project name src)
   endif()
 
   # include dirs
-  target_include_directories(${name} PRIVATE "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_INCLUDE_SUBDIR}" "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_INCLUDE_SUBDIR}/THNN" "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_INCLUDE_SUBDIR}/TH")
+  get_filename_component(TORCH_INCLUDE_DIR "${TH_INCLUDE_DIR}" DIRECTORY)
+  target_include_directories(${name} PRIVATE "${TORCH_INCLUDE_DIR}" "${TORCH_INCLUDE_DIR}/TH" "${TORCH_INCLUDE_DIR}/THNN")
 
   # link/usr/share/cmake-3.5/Modules/
-  find_library(TH_LIBRARY NAMES TH PATHS ${Torch_INSTALL_PREFIX}/${Torch_INSTALL_LIB_SUBDIR})
-  find_library(THNN_LIBRARY NAMES THNN PATHS ${Torch_INSTALL_PREFIX}/${Torch_INSTALL_LIB_SUBDIR}/lua/5.1)
+  find_library(TH_LIBRARY NAMES TH PATHS ${TH_INSTALL_PREFIX}/${TH_INSTALL_LIB_SUBDIR})
+  find_library(THNN_LIBRARY NAMES THNN PATHS ${TH_INSTALL_PREFIX}/${TH_INSTALL_LIB_SUBDIR}/lua/5.1)
   target_link_libraries(${name} ${TH_LIBRARY} ${THNN_LIBRARY})
 
   # install target
@@ -74,9 +75,9 @@ if(BUILD_CUDA)
   endif()
   file(GLOB_RECURSE cpptorch_cuda_src "src_cuda/*.cpp" "src_cuda/*.cc")
   generate_project(cpptorch_cuda "${cpptorch_cuda_src}")
-  target_include_directories(cpptorch_cuda PRIVATE ${CUDA_INCLUDE_DIRS} "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_INCLUDE_SUBDIR}" "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_INCLUDE_SUBDIR}/THCUNN" "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_INCLUDE_SUBDIR}/THC")
-  find_library(THC_LIBRARY NAMES THC PATHS ${Torch_INSTALL_PREFIX}/${Torch_INSTALL_LIB_SUBDIR})
-  find_library(THCUNN_LIBRARY NAMES THCUNN PATHS ${Torch_INSTALL_PREFIX}/${Torch_INSTALL_LIB_SUBDIR}/lua/5.1)
+  target_include_directories(cpptorch_cuda PRIVATE ${CUDA_INCLUDE_DIRS} "${TH_INSTALL_PREFIX}/${TH_INSTALL_INCLUDE_SUBDIR}" "${TH_INSTALL_PREFIX}/${TH_INSTALL_INCLUDE_SUBDIR}/THCUNN" "${TH_INSTALL_PREFIX}/${TH_INSTALL_INCLUDE_SUBDIR}/THC")
+  find_library(THC_LIBRARY NAMES THC PATHS ${TH_INSTALL_PREFIX}/${TH_INSTALL_LIB_SUBDIR})
+  find_library(THCUNN_LIBRARY NAMES THCUNN PATHS ${TH_INSTALL_PREFIX}/${TH_INSTALL_LIB_SUBDIR}/lua/5.1)
   target_link_libraries(cpptorch_cuda cpptorch ${THC_LIBRARY} ${THCUNN_LIBRARY})
 endif()
 
@@ -115,7 +116,7 @@ if(BUILD_TESTS)
     string(REPLACE ".lua" "" case_name ${case_name})
     add_test(NAME cpptorch_${case_name} COMMAND
       ${CMAKE_CURRENT_SOURCE_DIR}/test/run_test.sh
-        "${Torch_INSTALL_PREFIX}/${Torch_INSTALL_BIN_SUBDIR}"
+        "${TH_INSTALL_PREFIX}/${TH_INSTALL_BIN_SUBDIR}"
         "${CMAKE_CURRENT_BINARY_DIR}"
         "${each_case}"
     )
