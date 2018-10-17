@@ -54,6 +54,7 @@ template<> API std::ostream& operator << (std::ostream &o, const cpptorch::Tenso
 #include "nn/Sqrt.h.inl"
 #include "nn/Square.h.inl"
 #include "nn/Threshold.h.inl"
+#include "nn/Dropout.h.inl"
 #include "nn/View.h.inl"
 
 

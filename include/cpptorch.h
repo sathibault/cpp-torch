@@ -32,6 +32,7 @@
 #include "nn/Sqrt.h"
 #include "nn/Square.h"
 #include "nn/Threshold.h"
+#include "nn/Dropout.h"
 #include "nn/View.h"
 
 #include "allocator.h"

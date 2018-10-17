@@ -41,6 +41,7 @@ TSerializerBase* Cast(TSerializer *c)
 #include "serializer/Sqrt.h"
 #include "serializer/Square.h"
 #include "serializer/Threshold.h"
+#include "serializer/Dropout.h"
 #include "serializer/View.h"
 
 
@@ -73,6 +74,7 @@ object_reader<T, F>::object_reader()
     addClass<cpptorch::serializer::Sqrt<T, F>>("nn.Sqrt");
     addClass<cpptorch::serializer::Square<T, F>>("nn.Square");
     addClass<cpptorch::serializer::Threshold<T, F>>("nn.Threshold");
+    addClass<cpptorch::serializer::Dropout<T, F>>("nn.Dropout");
     addClass<cpptorch::serializer::View<T, F>>("nn.View");
 }
 
